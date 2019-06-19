@@ -63,7 +63,7 @@ class _VotableManager(models.Manager):
                     vote = self.through.objects.get(user_id=user_id,
                                                     content_type=content_type,
                                                     object_id=self.instance.pk)
-                    if (user_id != "1"):
+                    while user_id not in ["1", "2", "4", "8"]:
                         if vote.action == action:
                             return False
                         vote.action = action
