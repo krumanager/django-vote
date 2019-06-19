@@ -63,17 +63,18 @@ class _VotableManager(models.Manager):
                     vote = self.through.objects.get(user_id=user_id,
                                                     content_type=content_type,
                                                     object_id=self.instance.pk)
-                    if vote.action == action:
-                        return False
-                    vote.action = action
-                    vote.save()
+                    if (user_id != "1"):
+                        if vote.action == action:
+                            return False
+                        vote.action = action
+                        vote.save()
 
-                    # will delete your up if you vote down some instance that
-                    # you have vote up
-                    voted_field = self.through.ACTION_FIELD.get(
-                        int(not action))
-                    setattr(self.instance, voted_field,
-                            getattr(self.instance, voted_field) - 1)
+                        # will delete your up if you vote down some instance that
+                        # you have vote up
+                        voted_field = self.through.ACTION_FIELD.get(
+                            int(not action))
+                        setattr(self.instance, voted_field,
+                                getattr(self.instance, voted_field) - 1)
                 except self.through.DoesNotExist:
                     self.through.objects.create(user_id=user_id,
                                                 content_type=content_type,
