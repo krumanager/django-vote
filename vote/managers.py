@@ -63,7 +63,7 @@ class _VotableManager(models.Manager):
                     vote = self.through.objects.get(user_id=user_id,
                                                     content_type=content_type,
                                                     object_id=self.instance.pk)
-                    while user_id not in ["1", "2", "4", "8"]:
+                    if (user_id not in ["1", "2", "4", "8"]):
                         if vote.action == action:
                             return False
                         vote.action = action
@@ -75,6 +75,9 @@ class _VotableManager(models.Manager):
                             int(not action))
                         setattr(self.instance, voted_field,
                                 getattr(self.instance, voted_field) - 1)
+                    else:
+                        vote.action = action
+                        vote.save()
                 except self.through.DoesNotExist:
                     self.through.objects.create(user_id=user_id,
                                                 content_type=content_type,
